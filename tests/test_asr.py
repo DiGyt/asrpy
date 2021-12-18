@@ -6,7 +6,7 @@ import os.path as op
 import numpy as np
 from scipy.io import loadmat
 
-from mne.preprocessing.asr import ASR
+from asrpy import ASR
 from mne.io import read_raw_eeglab
 from mne.datasets import testing
 from mne.utils import run_tests_if_main
