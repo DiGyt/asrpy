@@ -16,10 +16,17 @@ large-amplitude artifacts in multi-channel EEG recordings (Kothe & Jung,
 2016). This repository provides a Python implementation of the standard 
 ASR algorithm, similar to the original MATLAB implementation in EEGLab's 
 [`clean_rawdata`](https://github.com/sccn/clean_rawdata) plugin.
-
 As of now, this repository only implements the standard version of 
 the ASR algorithm. A valid version of the improved _riemannian_ ASR 
 (Blum et al., 2019) might be added in the future.
+
+This implementation aims to follow the original ASR algorithm as close 
+as possible. Using the according parameters, it should be perfectly 
+equivalent to the original implementation, except for a few imprecisions
+introduced by different solvers implemented in Python and MATLAB, e.g. 
+when calculating the eigenspace. However, this implementation is 
+based on [python_meegkit](https://github.com/nbara/python-meegkit). 
+For an alternative implementation check their repository.
 
 #### References
 
