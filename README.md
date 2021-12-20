@@ -33,7 +33,8 @@ asr.fit(raw)
 raw = asr.transform(raw)
 ```
 
-To get started, we recommend going through the [example notebook](https://github.com/DiGyt/asrpy/blob/main/example.ipynb. You can simply run them via your internet browser (on Google Colab's hosted runtime) by clicking the  button below.
+To get started, we recommend going through the [example notebook](https://github.com/DiGyt/asrpy/blob/main/example.ipynb). You can simply run them via your internet browser (on Google Colab's hosted runtime) by clicking the  button below.
+
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DiGyt/asrpy/blob/main/example.ipynb)
 
 
