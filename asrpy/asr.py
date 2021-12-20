@@ -300,7 +300,7 @@ class ASR():
 
         """
         # extract the data
-        X = raw.get_data(picks=picks, start=start, stop=stop)
+        X = raw.get_data(picks=picks)
         
         X = asr_process(X, self.sfreq, self.M, self.T, self.win_len,
                         lookahead, stepsize, maxdims, (self.A, self.B),
