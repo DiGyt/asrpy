@@ -176,14 +176,14 @@ class ASR():
 
         Parameters
         ----------
-        raw : mne.io.Raw
+        raw : instance of mne.io.Raw
             Instance of mne.io.Raw to be used for fitting the ASR.
             The calibration data should have been high-pass filtered (for
             example at 0.5Hz or 1Hz using a Butterworth IIR filter), and be
             reasonably clean not less than 30 seconds (this method is
             typically used with 1 minute or more).
         picks : str | list | slice | None
-            Channels to include. Slices and lists of integers will be 
+            Channels used to fit the ASR. Slices and lists of integers will be 
             interpreted as channel indices. In lists, channel type strings 
             (e.g., ['meg', 'eeg']) will pick channels of those types, channel 
             name strings (e.g., ['MEG0111', 'MEG2623'] will pick the given 
@@ -243,14 +243,23 @@ class ASR():
         if return_clean_window:
             return clean, sample_mask
 
-    def transform(self, raw, lookahead=0.25, stepsize=32, maxdims=0.66,
-                  return_states=False, mem_splits=3, remove_lookahead=True):
+    def transform(self, raw, picks="eeg", lookahead=0.25, stepsize=32, 
+                  maxdims=0.66, return_states=False, mem_splits=3, 
+                  remove_lookahead=True):
         """Apply Artifact Subspace Reconstruction.
 
         Parameters
         ----------
-        raw : array, shape=([n_trials, ]n_channels, n_samples)
-            Raw data.
+        raw : instance of mne.io.Raw
+            Instance of mne.io.Raw to be transformed by the ASR.
+        picks : str | list | slice | None
+            Channels to be transformed by the ASR. Should be the same set of 
+            channels as used by `ASR.fit()`. Slices and lists of integers will 
+            be interpreted as channel indices. In lists, channel type strings 
+            (e.g., ['meg', 'eeg']) will pick channels of those types, channel 
+            name strings (e.g., ['MEG0111', 'MEG2623'] will pick the given 
+            channels. Note that channels in info['bads'] will be included if 
+            their names or indices are explicitly provided. Defaults to "eeg".
         lookahead : float
             Amount of look-ahead that the algorithm should use. Since the
             processing is causal, the output signal will be delayed by this
