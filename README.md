@@ -42,6 +42,7 @@ To get started, we recommend going through the [example notebook](https://github
 Please refer to the ASRpy function Docstrings for documentation. In most Python IDEs, you can read them by e.g. typing `asrpy.ASR?`
 
 The following functions/objects are available.
+
 Main API:
 ```python
 asrpy.ASR
