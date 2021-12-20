@@ -17,16 +17,19 @@ component-based artifact removal method for removing transient or
 large-amplitude artifacts in multi-channel EEG recordings [1]. This
 repository provides a Python implementation of the standard ASR 
 algorithm, similar to the original MATLAB implementation in EEGLab's 
-[`clean_rawdata` plugin](https://github.com/sccn/clean_rawdata).
+[`clean_rawdata`](https://github.com/sccn/clean_rawdata) plugin.
 
 As of now, this repository only implements the standard version of 
 the ASR algorithm. A valid version of the improved _riemannian_ ASR [2] 
 might be added in the future.
 
+___
+
 [1] Kothe, C. A. E., & Jung, T. P. (2016). U.S. Patent Application No.
    14/895,440. https://patents.google.com/patent/US20160113587A1/en
-[2] Blum, S., Jacobsen, N. S. J., Bleichner, M. G., & Debener, S.
-   (2019). A Riemannian Modification of Artifact Subspace Reconstruction
+   
+[2] Blum, S., Jacobsen, N. S. J., Bleichner, M. G., & Debener, S. 
+(2019). A Riemannian Modification of Artifact Subspace Reconstruction
    for EEG Artifact Handling. Frontiers in Human Neuroscience, 13.
    https://doi.org/10.3389/fnhum.2019.00141
    
