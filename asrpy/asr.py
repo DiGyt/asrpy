@@ -28,8 +28,9 @@ class ASR():
         Standard deviation cutoff for rejection. X portions whose variance
         is larger than this threshold relative to the calibration data are
         considered missing data and will be removed. The most aggressive value
-        that can be used without losing too much EEG is 2.5. A quite
-        conservative value would be 5 (default=5).
+        that can be used without losing too much EEG is 2.5. Recommended to 
+        use with more conservative values ranging from 20 - 30.
+        Defaults to 20.
     blocksize : int
         Block size for calculating the robust data covariance and thresholds,
         in samples; allows to reduce the memory and time requirements of the
@@ -111,7 +112,7 @@ class ASR():
 
     """
 
-    def __init__(self, sfreq=1000, cutoff=5, blocksize=100, win_len=0.5,
+    def __init__(self, sfreq=1000, cutoff=20, blocksize=100, win_len=0.5,
                  win_overlap=0.66, max_dropout_fraction=0.1,
                  min_clean_fraction=0.25, ab=None, max_bad_chans=0.1,
                  method="euclid"):
@@ -183,9 +184,9 @@ class ASR():
             reasonably clean not less than 30 seconds (this method is
             typically used with 1 minute or more).
         picks : str | list | slice | None
-            Channels used to fit the ASR. Slices and lists of integers will be 
-            interpreted as channel indices. In lists, channel type strings 
-            (e.g., ['meg', 'eeg']) will pick channels of those types, channel 
+            Channels used to fit the ASR. All channels should be of the same 
+            type (e.g. "eeg", "grads"). Slices and lists of integers will 
+            be interpreted as channel indices. In lists, channel 
             name strings (e.g., ['MEG0111', 'MEG2623'] will pick the given 
             channels. Note that channels in info['bads'] will be included if 
             their names or indices are explicitly provided. Defaults to "eeg".
@@ -253,9 +254,9 @@ class ASR():
             Instance of mne.io.Raw to be transformed by the ASR.
         picks : str | list | slice | None
             Channels to be transformed by the ASR. Should be the same set of 
-            channels as used by `ASR.fit()`. Slices and lists of integers will 
-            be interpreted as channel indices. In lists, channel type strings 
-            (e.g., ['meg', 'eeg']) will pick channels of those types, channel 
+            channels as used by `ASR.fit()`. All channels should be of the 
+            same type (e.g. "eeg", "grads"). Slices and lists of integers will 
+            be interpreted as channel indices. In lists, channel 
             name strings (e.g., ['MEG0111', 'MEG2623'] will pick the given 
             channels. Note that channels in info['bads'] will be included if 
             their names or indices are explicitly provided. Defaults to "eeg".
@@ -364,8 +365,8 @@ def asr_calibrate(X, sfreq, cutoff=5, blocksize=100, win_len=0.5,
         Standard deviation cutoff for rejection. X portions whose variance
         is larger than this threshold relative to the calibration data are
         considered missing data and will be removed. The most aggressive value
-        that can be used without losing too much EEG is 2.5. A quite
-        conservative value would be 5 (default=5).
+        that can be used without losing too much EEG is 2.5. Defaults to 5 
+        (according to the original default in EEGLab's `clean_rawdata`).
     blocksize : int
         Block size for calculating the robust data covariance and thresholds,
         in samples; allows to reduce the memory and time requirements of the
