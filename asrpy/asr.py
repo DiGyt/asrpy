@@ -112,7 +112,7 @@ class ASR():
 
     """
 
-    def __init__(self, sfreq=1000, cutoff=20, blocksize=100, win_len=0.5,
+    def __init__(self, sfreq, cutoff=20, blocksize=100, win_len=0.5,
                  win_overlap=0.66, max_dropout_fraction=0.1,
                  min_clean_fraction=0.25, ab=None, max_bad_chans=0.1,
                  method="euclid"):
