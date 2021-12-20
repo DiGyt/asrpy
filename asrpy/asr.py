@@ -244,8 +244,7 @@ class ASR():
             return clean, sample_mask
 
     def transform(self, raw, picks="eeg", lookahead=0.25, stepsize=32, 
-                  maxdims=0.66, return_states=False, mem_splits=3, 
-                  remove_lookahead=True):
+                  maxdims=0.66, return_states=False, mem_splits=3):
         """Apply Artifact Subspace Reconstruction.
 
         Parameters
@@ -261,11 +260,16 @@ class ASR():
             channels. Note that channels in info['bads'] will be included if 
             their names or indices are explicitly provided. Defaults to "eeg".
         lookahead : float
-            Amount of look-ahead that the algorithm should use. Since the
-            processing is causal, the output signal will be delayed by this
-            amount. This value is in seconds and should be between 0 (no
-            lookahead) and WindowLength/2 (optimal lookahead). The recommended
-            value is WindowLength/2. Default: 0.25
+            Amount of look-ahead that the algorithm should use (in seconds). 
+            This value should be between 0 (no lookahead) and WindowLength/2 
+            (optimal lookahead). The recommended value is WindowLength/2. 
+            Default: 0.25
+            
+            Note: Other than in `asr_process`, the signal will be readjusted 
+            to eliminate any temporal jitter and automatically readjust it to 
+            the correct time points. Zero-padding will be applied to the last 
+            `lookahead` portion of the data, possibly resulting in inaccuracies 
+            for the final `lookahead` seconds of the recording.
         stepsize : int
             The steps in which the algorithm will be updated. The larger this
             is, the faster the algorithm will be. The value must not be larger
@@ -286,12 +290,6 @@ class ASR():
             False.
         mem_splits : int
             Split the array in `mem_splits` segments to save memory.
-        remove_lookahead: bool
-            Whether to remove the lookahead portion of the data (if a 
-            lookahead is used). Setting this to 'True' will ensure that
-            there's no temporal jitter in your data. If False, additional 
-            lookahead times will be added to the raw instance (before the 
-            first sample). Defaults to True.
         
         Returns
         -------
@@ -302,24 +300,24 @@ class ASR():
         # extract the data
         X = raw.get_data(picks=picks)
         
+        # add lookahead padding
+        lookahead_samples = int(self.sfreq * lookahead)
+        X = np.concatenate([X,
+                            np.zeros([X.shape[0], lookahead_samples])])
+        
+        # apply ASR
         X = asr_process(X, self.sfreq, self.M, self.T, self.win_len,
                         lookahead, stepsize, maxdims, (self.A, self.B),
                         self.R, self.Zi, self.cov, self.carry,
                         return_states, self.method, mem_splits)
         
-        raw = raw.copy()
+        # remove lookahead portion from start
+        X = X[:, lookahead_samples:]
         
-        if remove_lookahead:
-            X = X[:, int(self.sfreq * lookahead):]
-        else:
-            added = np.arange(raw.times[0] - lookahead * self.sfreq,
-                              raw.times[0], 1 / self.sfreq)
-            raw.times = np.concatenate([added, raw.times])
-            
+        # Return a modifier raw instance
+        raw = raw.copy()
         raw.apply_function(lambda x: X, picks=picks,
                            channel_wise=False)
-        
-        
         return raw
 
 
