@@ -300,10 +300,11 @@ class ASR():
         # extract the data
         X = raw.get_data(picks=picks)
         
-        # add lookahead padding
+        # add lookahead padding at the end
         lookahead_samples = int(self.sfreq * lookahead)
         X = np.concatenate([X,
-                            np.zeros([X.shape[0], lookahead_samples])])
+                            np.zeros([X.shape[0], lookahead_samples])],
+                          axis=1)
         
         # apply ASR
         X = asr_process(X, self.sfreq, self.M, self.T, self.win_len,
