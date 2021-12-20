@@ -1,8 +1,6 @@
 # ASRpy
 Artifact Subspace Reconstruction for Python
 
-___
-### Simplified Categorization for Eye Tracking in Python
 
 - [Introduction](#introduction)
 - [Installation](#installation)
