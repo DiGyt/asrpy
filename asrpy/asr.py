@@ -138,9 +138,9 @@ class ASR():
         else:
             self.A, self.B = ab
 
-        self.reset()
+        self._reset()
 
-    def reset(self):
+    def _reset(self):
         """Reset state variables."""
         self.M = None
         self.T = None
@@ -153,7 +153,8 @@ class ASR():
         self.cov = None
         self._fitted = False
 
-    def fit(self, X, y=None, return_clean_window=False):
+    def fit(self, raw, picks="eeg", start=0, stop=None,
+            return_clean_window=False):
         """Calibration for the Artifact Subspace Reconstruction method.
 
         The input to this data is a multi-channel time series of calibration
@@ -175,14 +176,24 @@ class ASR():
 
         Parameters
         ----------
-        X : array, shape=(n_channels, n_samples)
+        raw : mne.io.Raw
+            Instance of mne.io.Raw to be used for fitting the ASR.
             The calibration data should have been high-pass filtered (for
             example at 0.5Hz or 1Hz using a Butterworth IIR filter), and be
             reasonably clean not less than 30 seconds (this method is
             typically used with 1 minute or more).
-        y : None
-            Redundant argument. Included for scikit-learn compatibility.
-            Changing this argument have no effect.
+        picks : str | list | slice | None
+            Channels to include. Slices and lists of integers will be 
+            interpreted as channel indices. In lists, channel type strings 
+            (e.g., ['meg', 'eeg']) will pick channels of those types, channel 
+            name strings (e.g., ['MEG0111', 'MEG2623'] will pick the given 
+            channels. Note that channels in info['bads'] will be included if 
+            their names or indices are explicitly provided. Defaults to "eeg".
+        start : int
+            The first sample to use for fitting the data. Defaults to 0.
+        stop : int | None
+            The last sample to use for fitting the data. If `None`, all 
+            samples after `start` will be used for fitting. Defaults to None.
         return_clean_window : Bool
             If True, the method will return the variables `clean` (the cropped
              dataset which was used to fit the ASR) and `sample_mask` (a
@@ -199,6 +210,10 @@ class ASR():
             Logical mask of the samples which were used to train the ASR.
 
         """
+        
+        # extract the data
+        X = raw.get_data(picks=picks, start=start, stop=stop)
+        
         # Find artifact-free windows first
         clean, sample_mask = clean_windows(
             X,
@@ -228,24 +243,21 @@ class ASR():
         if return_clean_window:
             return clean, sample_mask
 
-    def transform(self, X, y=None, lookahead=0.25, stepsize=32, maxdims=0.66,
-                  return_states=False, mem_splits=3):
+    def transform(self, raw, lookahead=0.25, stepsize=32, maxdims=0.66,
+                  return_states=False, mem_splits=3, remove_lookahead=True):
         """Apply Artifact Subspace Reconstruction.
 
         Parameters
         ----------
-        X : array, shape=([n_trials, ]n_channels, n_samples)
+        raw : array, shape=([n_trials, ]n_channels, n_samples)
             Raw data.
-        y : None
-            Redundant argument. Included for scikit-learn compatibility.
-            Changing this argument have no effect.
-        lookahead:
+        lookahead : float
             Amount of look-ahead that the algorithm should use. Since the
             processing is causal, the output signal will be delayed by this
             amount. This value is in seconds and should be between 0 (no
             lookahead) and WindowLength/2 (optimal lookahead). The recommended
             value is WindowLength/2. Default: 0.25
-        stepsize:
+        stepsize : int
             The steps in which the algorithm will be updated. The larger this
             is, the faster the algorithm will be. The value must not be larger
             than WindowLength * SamplingRate. The minimum value is 1 (update
@@ -265,6 +277,12 @@ class ASR():
             False.
         mem_splits : int
             Split the array in `mem_splits` segments to save memory.
+        remove_lookahead: bool
+            Whether to remove the lookahead portion of the data (if a 
+            lookahead is used). Setting this to 'True' will ensure that
+            there's no temporal jitter in your data. If False, additional 
+            lookahead times will be added to the raw instance (before the 
+            first sample). Defaults to True.
         
         Returns
         -------
@@ -272,16 +290,39 @@ class ASR():
             Filtered data.
 
         """
-        return asr_process(X, self.sfreq, self.M, self.T, self.win_len,
-                           lookahead, stepsize, maxdims, (self.A, self.B),
-                           self.R, self.Zi, self.cov, self.carry,
-                           return_states, self.method, mem_splits)
+        # extract the data
+        X = raw.get_data(picks=picks, start=start, stop=stop)
+        
+        X = asr_process(X, self.sfreq, self.M, self.T, self.win_len,
+                        lookahead, stepsize, maxdims, (self.A, self.B),
+                        self.R, self.Zi, self.cov, self.carry,
+                        return_states, self.method, mem_splits)
+        
+        raw = raw.copy()
+        
+        if remove_lookahead:
+            X = X[:, int(self.sfreq * lookahead):]
+        else:
+            added = np.arange(raw.times[0] - lookahead * self.sfreq,
+                              raw.times[0], 1 / self.sfreq)
+            raw.times = np.concatenate([added, raw.times])
+            
+        raw.apply_function(lambda x: X, picks=picks,
+                           channel_wise=False)
+        
+        
+        return raw
 
 
 def asr_calibrate(X, sfreq, cutoff=5, blocksize=100, win_len=0.5,
                   win_overlap=0.66, max_dropout_fraction=0.1,
                   min_clean_fraction=0.25, ab=None, method='euclid'):
     """Calibration function for the Artifact Subspace Reconstruction method.
+    
+    This function can be used if you inted to apply ASR to a simple numpy 
+    array instead of a mne.io.Raw object. It is equivalent to the MATLAB 
+    implementation of asr_calibrate (except for some small differences 
+    introduced by solvers for the eigenspace functions etc).
 
     The input to this data is a multi-channel time series of calibration data.
     In typical uses the calibration data is clean resting EEG data of ca. 1
@@ -405,10 +446,15 @@ def asr_calibrate(X, sfreq, cutoff=5, blocksize=100, win_len=0.5,
 def asr_process(data, sfreq, M, T, windowlen=0.5, lookahead=0.25, stepsize=32,
                 maxdims=0.66, ab=None, R=None, Zi=None, cov=None, carry=None,
                 return_states=False, method="euclid", mem_splits=3):
-    """Apply Artifact Subspace Reconstruction method.
+    """Apply the Artifact Subspace Reconstruction method to a data array.
 
     This function is used to clean multi-channel signal using the ASR method.
     The required inputs are the data matrix and the sampling rate of the data.
+    
+    `asr_process` can be used if you inted to apply ASR to a simple numpy 
+    array instead of a mne.io.Raw object. It is equivalent to the MATLAB 
+    implementation of `asr_process` (except for some small differences 
+    introduced by solvers for the eigenspace functions etc).
 
     Parameters
     ----------
@@ -467,7 +513,7 @@ def asr_process(data, sfreq, M, T, windowlen=0.5, lookahead=0.25, stepsize=32,
         If True, returns a dict including the updated states {"M":M, "T":T,
         "R":R, "Zi":Zi, "cov":cov, "carry":carry}. Defaults to False.
     method : {'euclid', 'riemann'}
-        Metric to compute the covariance matrix average. For now, only
+        Metric to compute the covariance matrix average. Currently, only
         euclidean ASR is supported.
     mem_splits : int
         Split the array in `mem_splits` segments to save memory.

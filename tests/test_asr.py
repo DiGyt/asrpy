@@ -26,8 +26,8 @@ def test_asr():
     asr = ASR(sfreq=raw.info["sfreq"], cutoff=2.5, blocksize=10, win_len=0.5,
               win_overlap=0.66, max_dropout_fraction=0.1,
               min_clean_fraction=0.25, ab=None)
-    asr.fit(raw.get_data())
-    cleaned = asr.transform(raw.get_data(), lookahead=0.25, stepsize=32,
+    asr.fit(raw)
+    cleaned = asr.transform(raw, lookahead=0.25, stepsize=32,
                             maxdims=0.66)
 
     # check if the data is highly equal to the MATLAB data
