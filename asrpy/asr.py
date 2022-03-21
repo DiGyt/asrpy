@@ -355,7 +355,7 @@ def asr_calibrate(X, sfreq, cutoff=5, blocksize=100, win_len=0.5,
 
     Parameters
     ----------
-    X : array, shape=([n_trials, ]n_channels, n_samples)
+    X : array, shape=(n_channels, n_samples)
         *zero-mean* (e.g., high-pass filtered) and reasonably clean EEG of not
         much less than 30 seconds (this method is typically used with 1 minute
         or more).
@@ -467,7 +467,7 @@ def asr_process(data, sfreq, M, T, windowlen=0.5, lookahead=0.25, stepsize=32,
 
     Parameters
     ----------
-    data : array, shape=([n_trials, ]n_channels, n_samples)
+    data : array, shape=(n_channels, n_samples)
         Raw data.
     sfreq : float
         The sampling rate of the data.
