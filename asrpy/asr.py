@@ -387,6 +387,14 @@ def asr_calibrate(X, sfreq, cutoff=5, blocksize=100, win_len=0.5,
     min_clean_fraction : float
         Minimum fraction of windows that need to be clean, used for threshold
         estimation (default=0.25).
+    ab : 2-tuple | None
+        Coefficients (A, B) of an IIR filter that is used to shape the
+        spectrum of the signal when calculating artifact statistics. The
+        output signal does not go through this filter. This is an optional way
+        to tune the sensitivity of the algorithm to each frequency component
+        of the signal. The default filter is less sensitive at alpha and beta
+        frequencies and more sensitive at delta (blinks) and gamma (muscle)
+        frequencies. Defaults to None.
     method : {'euclid', 'riemann'}
         Metric to compute the covariance matrix average. For now, only
         euclidean ASR is supported.
