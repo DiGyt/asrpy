@@ -327,7 +327,7 @@ class ASR():
         return raw
 
 
-def asr_calibrate(X, sfreq, cutoff=5, blocksize=100, win_len=0.5,
+def asr_calibrate(X, sfreq, cutoff=20, blocksize=100, win_len=0.5,
                   win_overlap=0.66, max_dropout_fraction=0.1,
                   min_clean_fraction=0.25, ab=None, method='euclid'):
     """Calibration function for the Artifact Subspace Reconstruction method.
@@ -368,9 +368,9 @@ def asr_calibrate(X, sfreq, cutoff=5, blocksize=100, win_len=0.5,
     cutoff: float
         Standard deviation cutoff for rejection. X portions whose variance
         is larger than this threshold relative to the calibration data are
-        considered missing data and will be removed. The most aggressive value
-        that can be used without losing too much EEG is 2.5. Defaults to 5 
-        (according to the original default in EEGLab's `clean_rawdata`).
+        considered missing data and will be removed. Defaults to 20 
+        (In EEGLab's `clean_rawdata` the original threshold was set to 5, but
+        it is widely recommended to use a value higher than 20).
     blocksize : int
         Block size for calculating the robust data covariance and thresholds,
         in samples; allows to reduce the memory and time requirements of the

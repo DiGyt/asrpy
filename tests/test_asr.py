@@ -12,7 +12,7 @@ from mne.datasets import testing
 from mne.utils import run_tests_if_main
 
 # set paths
-data_path = op.join(testing.data_path(download=False), 'EEGLAB')
+data_path = op.join(testing.data_path(download=True), 'EEGLAB')
 eeg_fname = op.join(data_path, 'test_raw.set')
 valid_data_path = "./data/matlab_asr_data.mat"
 
