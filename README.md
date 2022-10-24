@@ -40,7 +40,7 @@ https://doi.org/10.3389/fnhum.2019.00141
    
 ## Installation
 
-You can install the latest asrpy release using:
+You can install the latest ASRpy release using:
 ```
 pip install asrpy
 ```
@@ -67,7 +67,7 @@ To get started, we recommend going through the [example notebook](https://github
 
 ## Documentation
 
-CatEyes' documentation is created using [pdoc3](https://pdoc3.github.io/pdoc/) and [GitHub Pages](https://pages.github.com/). Click on the link below to view the documentation.
+The ASRpy documentation is created using [pdoc3](https://pdoc3.github.io/pdoc/) and [GitHub Pages](https://pages.github.com/). Click on the link below to view the documentation.
 
 [Documentation](https://digyt.github.io/asrpy/)
 
