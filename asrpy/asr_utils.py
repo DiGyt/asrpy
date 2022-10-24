@@ -2,6 +2,9 @@
 #           Dirk Gütlin <dirk.guetlin@gmail.com>
 #
 # License: BSD (3-clause)
+"""
+In asrpy.utils you can find utility functions required to perform ASR.
+"""
 import numpy as np
 from scipy import signal
 from scipy.linalg import toeplitz

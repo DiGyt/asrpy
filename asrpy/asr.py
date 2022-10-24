@@ -2,6 +2,10 @@
 #           Nicolas Barascud
 #
 # License: BSD (3-clause)
+"""
+In asrpy.asr you can find the original ASR functions (similar to MATLAB)
+as well as a high-level ASR object ready to use with MNE-Python raw data.
+"""
 import logging
 import warnings
 

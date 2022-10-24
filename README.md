@@ -63,24 +63,30 @@ To get started, we recommend going through the [example notebook](https://github
 
 ## Documentation
 
-Please refer to the ASRpy function Docstrings for documentation. In most Python IDEs, you can read them by e.g. typing `asrpy.ASR?`
+CatEyes' documentation is created using [pdoc3](https://pdoc3.github.io/pdoc/) and [GitHub Pages](https://pages.github.com/). Click on the link below to view the documentation.
 
-The following functions/objects are available.
+[Documentation](https://digyt.github.io/asrpy/)
 
-Main API:
-```python
-asrpy.ASR
-asrpy.ASR.fit
-asrpy.ASR.transform
-```
+In most Python IDEs, you can also read them by e.g. typing `asrpy.ASR?`
 
-MATLAB-like functions (similar to EEGLab's clean_rawdata).
-```python
-asrpy.asr_calibrate
-asrpy.asr_process
-```
 
-Helper functions.
-```python
-asrpy.clean_windows
-```
+<!-- 
+Note for myself: build the documentation with:
+cd . #asrpy head dir
+pdoc3 --html --output-dir docs asrpy -f -c sort_identifiers=False
+
+Second Note: Deploy on PyPI like:
+git clone https://github.com/DiGyt/asrpy.git
+pip install asrpy/.
+rm -rf dist
+python asrpy/setup.py sdist
+python asrpy/setup.py bdist_wheel
+pip install twine
+twine check dist/*
+twine upload dist/*
+-->
+
+
+
+
+
