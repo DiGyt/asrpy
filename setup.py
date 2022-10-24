@@ -1,5 +1,6 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
+
 
 # Utility function to read the README file.
 def read(fname):
@@ -15,7 +16,8 @@ setup(
     license = "BSD-3",
     keywords = "EEG MEG Signal Processing",
     url = "https://github.com/DiGyt/asrpy",
-    packages=['asrpy', 'asrpy.asr', 'asrpy.asr_utils'],
+    package_dir = {"":"asrpy"},
+    packages = find_packages(where="asrpy"),
     include_package_data=True,
     long_description=read('README.md'),
     long_description_content_type='text/markdown',
