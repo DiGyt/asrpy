@@ -15,7 +15,7 @@ setup(
     license = "BSD-3",
     keywords = "EEG MEG Signal Processing",
     url = "https://github.com/DiGyt/asrpy",
-    packages=['asrpy'],
+    packages=['asrpy', 'asrpy.asr', 'asrpy.asr_utils'],
     include_package_data=True,
     long_description=read('README.md'),
     long_description_content_type='text/markdown',
