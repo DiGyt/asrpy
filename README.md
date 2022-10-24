@@ -40,7 +40,11 @@ https://doi.org/10.3389/fnhum.2019.00141
    
 ## Installation
 
-Currently, the way to install the package is:
+You can install the latest asrpy release using:
+```
+pip install asrpy
+```
+or install the current working version directly from GitHub, using:
 ```
 pip install git+https://github.com/DiGyt/asrpy.git
 ```
