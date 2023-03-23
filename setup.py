@@ -17,7 +17,7 @@ setup(
     keywords = "EEG MEG Signal Processing",
     url = "https://github.com/DiGyt/asrpy",
     package_dir = {"":"asrpy"},
-    packages = find_packages(where="asrpy"),
+    packages = ["asrpy"],
     include_package_data=True,
     long_description=read('README.md'),
     long_description_content_type='text/markdown',
