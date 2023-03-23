@@ -94,7 +94,7 @@ def fit_eeg_distribution(X, min_clean_fraction=0.25, max_dropout_fraction=0.1,
     # determine the quantile-dependent limits for the grid search
     # we can generally skip the tail below the lower quantile
     lower_min = np.min(quants)
-    # maximum width is the fit interval if all data is clean
+    # maximum width is the fit interval if all data is cleanT
     max_width = np.diff(quants)
     # minimum width of the fit interval, as fraction of data
     min_width = min_clean_fraction * max_width
@@ -266,7 +266,7 @@ def yulewalk(order, F, M):
     _, Ss = 2 * np.real(signal.freqz(Qh, A, worN=n, whole=True))
 
     hh = np.fft.ifft(
-        np.exp(np.fft.fft(Rwindow * np.fft.ifft(np.log(Ss, dtype=np.complex))))  # noqa
+        np.exp(np.fft.fft(Rwindow * np.fft.ifft(np.log(Ss, dtype=np.complex128))))  # noqa
     )
     B = np.real(numf(hh[0:nr], A, nb))
 
