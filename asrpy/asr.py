@@ -784,5 +784,7 @@ def clean_windows(X, sfreq, max_bad_chans=0.2, zthresholds=[-3.5, 5],
         sample_mask[0, sample_mask2remove] = False
     else:
         sample_mask = np.ones((1, ns), dtype=bool)
+        clean = X
+        print('Try calibrating ASR with cleaner data.')
 
     return clean, sample_mask
