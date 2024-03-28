@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "asrpy"
+version = "0.0.2"
+description = "Artifact Subspace Reconstruction in Python."
+authors = ["Dirk GGütlin"]
+license = "BSD-3"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">= 3.10"
+numpy = "^1.26.4"
+scipy = "^1.12.0"
+mne = "^1.6.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

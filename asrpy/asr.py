@@ -755,9 +755,9 @@ def clean_windows(X, sfreq, max_bad_chans=0.2, zthresholds=[-3.5, 5],
 
     # determine which windows to remove
     if np.max(zthresholds) > 0:
-        mask1 = swz[-(np.int(max_bad_chans) + 1), :] > np.max(zthresholds)
+        mask1 = swz[-(int(max_bad_chans) + 1), :] > np.max(zthresholds)
     if np.min(zthresholds) < 0:
-        mask2 = (swz[1 + np.int(max_bad_chans - 1), :] < np.min(zthresholds))
+        mask2 = (swz[1 + int(max_bad_chans - 1), :] < np.min(zthresholds))
 
     # combine the two thresholds
     remove_mask = np.logical_or.reduce((mask1, mask2))
