@@ -8,7 +8,7 @@ def read(fname):
 
 setup(
     name = "asrpy",
-    version = "0.0.2",
+    version = "0.0.3",
 
     author = "Dirk Gütlin",
     author_email = "dirk.guetlin@gmail.com",
