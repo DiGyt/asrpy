@@ -101,3 +101,16 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
           twine upload dist/* -u __token__ -p "$TWINE_PASSWORD"
+
+      - name: Generate documentation with pdoc3
+        if: steps.check_version.outputs.exists == 'false'
+        run: |
+          pip install pdoc3
+          pdoc3 --html --output-dir docs --force asrpy -c sort_identifiers=False
+
+      - name: Deploy Docs to GitHub Pages
+        if: steps.check_version.outputs.exists == 'false'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/asrpy
