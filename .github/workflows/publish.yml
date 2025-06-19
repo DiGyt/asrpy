@@ -106,7 +106,7 @@ jobs:
         if: steps.check_version.outputs.exists == 'false'
         run: |
           pip install pdoc3
-          pdoc3 --html --output-dir docs --force asrpy -c sort_identifiers=False
+          pdoc3 --html --output-dir docs asrpy -f -c sort_identifiers=False
 
       - name: Deploy Docs to GitHub Pages
         if: steps.check_version.outputs.exists == 'false'
