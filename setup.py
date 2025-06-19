@@ -6,9 +6,14 @@ from setuptools import setup, find_packages
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
+
+# read version from asrpy/__init__.py
+with open("asrpy/__init__.py") as f:
+    version = re.search(r'__version__ = "(.*)"', f.read()).group(1)
+
 setup(
     name = "asrpy",
-    version = "0.0.3",
+    version = version,
 
     author = "Dirk Gütlin",
     author_email = "dirk.guetlin@gmail.com",
