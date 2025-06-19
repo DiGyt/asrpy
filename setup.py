@@ -37,5 +37,5 @@ setup(
         "scipy",
         "mne",
     ],
-    extras_require={'dev': ['pytest'],}
+    extras_require={'dev': ['pytest', 'flake8', 'pytest-cov'],}
 )
