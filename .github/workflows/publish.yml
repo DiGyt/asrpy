@@ -52,7 +52,7 @@ jobs:
   publish:
     name: Build and Publish to PyPI
     runs-on: ubuntu-latest
-    needs: test  # Only run if all test matrix jobs pass
+    needs: test
 
     steps:
       - name: Checkout code
@@ -63,15 +63,35 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install build tools
+      - name: Install tools
         run: |
           python -m pip install --upgrade pip
-          pip install setuptools wheel twine
+          pip install setuptools wheel twine requests
+
+      - name: Get version from setup.py
+        id: get_version
+        run: |
+          VERSION=$(python setup.py --version)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check if version already exists on PyPI
+        id: check_version
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          PACKAGE="asrpy"
+          EXISTS=$(python -c "import json, urllib.request; versions = json.load(urllib.request.urlopen(f'https://pypi.org/pypi/{PACKAGE}/json'))['releases']; print('true' if '$VERSION' in versions else 'false')")
+          echo "exists=$EXISTS" >> $GITHUB_OUTPUT
+
+      - name: Stop if version already exists
+        if: steps.check_version.outputs.exists == 'true'
+        run: echo "Version already exists on PyPI — skipping publish."
 
       - name: Build distribution
+        if: steps.check_version.outputs.exists == 'false'
         run: python setup.py sdist bdist_wheel
 
       - name: Publish to PyPI
+        if: steps.check_version.outputs.exists == 'false'
         env:
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
