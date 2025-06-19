@@ -27,11 +27,11 @@ jobs:
           pip install -e .
           pip install pdoc3
 
-      - name: Generate HTML docs
-        run: pdoc3 --html --output-dir docs asrpy -f -c sort_identifiers=False
+      - name: Generate documentation with pdoc3
+        run: pdoc3 --html --output-dir docs --force asrpy -c sort_identifiers=False
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/asrpy  # pdoc3 puts output in docs/asrpy by default
+          publish_dir: ./docs/asrpy
