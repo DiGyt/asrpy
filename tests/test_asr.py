@@ -6,7 +6,7 @@ import os.path as op
 import numpy as np
 from scipy.io import loadmat
 
-from asrpy import ASR, asr_calibrate, asr_process
+from asrpy import ASR, asr_calibrate, asr_process, clean_windows
 from mne.io import read_raw_eeglab
 from mne.datasets import testing
 
@@ -66,16 +66,15 @@ def test_asr_process():
 def test_clean_windows():
     # Generate some random data
     X = np.random.randn(10, 1000)
-    
+
     # Run the clean_windows function
     cleaned, sample_mask = clean_windows(X, sfreq=100)
-    
+
     # Ensure the number of channels is unchanged
     assert cleaned.shape[0] == X.shape[0]
-    
+
     # Ensure the sample mask is of correct shape
     assert sample_mask.shape == (1, X.shape[1])
-    
+
     # Ensure cleaned data matches sample mask
     assert cleaned.shape[1] == sample_mask[0].sum()
-
