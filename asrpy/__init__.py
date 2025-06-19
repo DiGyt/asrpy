@@ -3,6 +3,8 @@
 #
 # License: BSD-3-Clause
 
+__version__ = "0.0.4"
+
 """
 Welcome to the ASRpy documentation.
 
