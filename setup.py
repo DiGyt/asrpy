@@ -37,4 +37,5 @@ setup(
         "scipy",
         "mne",
     ],
+    extras_require={'dev': ['pytest'],}
 )
