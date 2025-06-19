@@ -3,15 +3,11 @@
 ___
 
 # ASRpy
-Artifact Subspace Reconstruction for Python
-
 [![Tests](https://github.com/DiGyt/asrpy/actions/workflows/publish.yml/badge.svg)](https://github.com/DiGyt/asrpy/actions/workflows/publish.yml)
 [![codecov](https://codecov.io/gh/DiGyt/asrpy/branch/main/graph/badge.svg)](https://codecov.io/gh/DiGyt/asrpy)
 [![PyPI version](https://img.shields.io/pypi/v/asrpy.svg)](https://pypi.org/project/asrpy/)
-[![License](https://img.shields.io/github/license/DiGyt/asrpy.svg)](https://github.com/DiGyt/asrpy/blob/main/LICENSE)
 [![Documentation](https://img.shields.io/badge/docs-pdoc3-blue)](https://DiGyt.github.io/asrpy/)
-
-
+Artifact Subspace Reconstruction for Python
 
 - [Introduction](#introduction)
 - [Installation](#installation)
