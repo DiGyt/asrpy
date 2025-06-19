@@ -1,3 +1,7 @@
+> [!WARNING]  
+> This toolbox is currently not actively maintained. I would love to, but we all know that the incentives set for scientists don't really encourage work like this. :')
+___
+
 # ASRpy
 Artifact Subspace Reconstruction for Python
 
