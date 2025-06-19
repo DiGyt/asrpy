@@ -61,3 +61,21 @@ def test_asr_process():
 
     # Ensure the output shape is correct
     assert cleaned.shape == X.shape
+
+
+def test_clean_windows():
+    # Generate some random data
+    X = np.random.randn(10, 1000)
+    
+    # Run the clean_windows function
+    cleaned, sample_mask = clean_windows(X, sfreq=100)
+    
+    # Ensure the number of channels is unchanged
+    assert cleaned.shape[0] == X.shape[0]
+    
+    # Ensure the sample mask is of correct shape
+    assert sample_mask.shape == (1, X.shape[1])
+    
+    # Ensure cleaned data matches sample mask
+    assert cleaned.shape[1] == sample_mask[0].sum()
+
