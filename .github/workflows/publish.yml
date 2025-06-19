@@ -1,4 +1,4 @@
-name: Test, Lint, Coverage, and Publish
+name: Ubuntu/MacOS/Windows/Lint/Docs/Publish
 
 on:
   push:
