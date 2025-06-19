@@ -32,7 +32,7 @@ class ASR():
         Standard deviation cutoff for rejection. X portions whose variance
         is larger than this threshold relative to the calibration data are
         considered missing data and will be removed. The most aggressive value
-        that can be used without losing too much EEG is 2.5. Recommended to 
+        that can be used without losing too much EEG is 2.5. Recommended to
         use with more conservative values ranging from 20 - 30.
         Defaults to 20.
     blocksize : int
@@ -188,16 +188,16 @@ class ASR():
             reasonably clean not less than 30 seconds (this method is
             typically used with 1 minute or more).
         picks : str | list | slice | None
-            Channels used to fit the ASR. All channels should be of the same 
-            type (e.g. "eeg", "grads"). Slices and lists of integers will 
-            be interpreted as channel indices. In lists, channel 
-            name strings (e.g., ['MEG0111', 'MEG2623'] will pick the given 
-            channels. Note that channels in info['bads'] will be included if 
+            Channels used to fit the ASR. All channels should be of the same
+            type (e.g. "eeg", "grads"). Slices and lists of integers will
+            be interpreted as channel indices. In lists, channel
+            name strings (e.g., ['MEG0111', 'MEG2623'] will pick the given
+            channels. Note that channels in info['bads'] will be included if
             their names or indices are explicitly provided. Defaults to "eeg".
         start : int
             The first sample to use for fitting the data. Defaults to 0.
         stop : int | None
-            The last sample to use for fitting the data. If `None`, all 
+            The last sample to use for fitting the data. If `None`, all
             samples after `start` will be used for fitting. Defaults to None.
         return_clean_window : Bool
             If True, the method will return the variables `clean` (the cropped
@@ -215,10 +215,10 @@ class ASR():
             Logical mask of the samples which were used to train the ASR.
 
         """
-        
+
         # extract the data
         X = raw.get_data(picks=picks, start=start, stop=stop)
-        
+
         # Find artifact-free windows first
         clean, sample_mask = clean_windows(
             X,
@@ -248,7 +248,7 @@ class ASR():
         if return_clean_window:
             return clean, sample_mask
 
-    def transform(self, raw, picks="eeg", lookahead=0.25, stepsize=32, 
+    def transform(self, raw, picks="eeg", lookahead=0.25, stepsize=32,
                   maxdims=0.66, return_states=False, mem_splits=3):
         """Apply Artifact Subspace Reconstruction.
 
@@ -257,23 +257,23 @@ class ASR():
         raw : instance of mne.io.Raw
             Instance of mne.io.Raw to be transformed by the ASR.
         picks : str | list | slice | None
-            Channels to be transformed by the ASR. Should be the same set of 
-            channels as used by `ASR.fit()`. All channels should be of the 
-            same type (e.g. "eeg", "grads"). Slices and lists of integers will 
-            be interpreted as channel indices. In lists, channel 
-            name strings (e.g., ['MEG0111', 'MEG2623'] will pick the given 
-            channels. Note that channels in info['bads'] will be included if 
+            Channels to be transformed by the ASR. Should be the same set of
+            channels as used by `ASR.fit()`. All channels should be of the
+            same type (e.g. "eeg", "grads"). Slices and lists of integers will
+            be interpreted as channel indices. In lists, channel
+            name strings (e.g., ['MEG0111', 'MEG2623'] will pick the given
+            channels. Note that channels in info['bads'] will be included if
             their names or indices are explicitly provided. Defaults to "eeg".
         lookahead : float
-            Amount of look-ahead that the algorithm should use (in seconds). 
-            This value should be between 0 (no lookahead) and WindowLength/2 
-            (optimal lookahead). The recommended value is WindowLength/2. 
+            Amount of look-ahead that the algorithm should use (in seconds).
+            This value should be between 0 (no lookahead) and WindowLength/2
+            (optimal lookahead). The recommended value is WindowLength/2.
             Default: 0.25
-            
-            Note: Other than in `asr_process`, the signal will be readjusted 
-            to eliminate any temporal jitter and automatically readjust it to 
-            the correct time points. Zero-padding will be applied to the last 
-            `lookahead` portion of the data, possibly resulting in inaccuracies 
+
+        Note: Other than in `asr_process`, the signal will be readjusted
+            to eliminate any temporal jitter and automatically readjust it to
+            the correct time points. Zero-padding will be applied to the last
+            `lookahead` portion of the data, possibly resulting in inaccuracies
             for the final `lookahead` seconds of the recording.
         stepsize : int
             The steps in which the algorithm will be updated. The larger this
@@ -295,7 +295,7 @@ class ASR():
             False.
         mem_splits : int
             Split the array in `mem_splits` segments to save memory.
-        
+
         Returns
         -------
         out : array, shape=(n_channels, n_samples)
@@ -304,22 +304,22 @@ class ASR():
         """
         # extract the data
         X = raw.get_data(picks=picks)
-        
+
         # add lookahead padding at the end
         lookahead_samples = int(self.sfreq * lookahead)
         X = np.concatenate([X,
                             np.zeros([X.shape[0], lookahead_samples])],
-                          axis=1)
-        
+                           axis=1)
+
         # apply ASR
         X = asr_process(X, self.sfreq, self.M, self.T, self.win_len,
                         lookahead, stepsize, maxdims, (self.A, self.B),
                         self.R, self.Zi, self.cov, self.carry,
                         return_states, self.method, mem_splits)
-        
+
         # remove lookahead portion from start
         X = X[:, lookahead_samples:]
-        
+
         # Return a modifier raw instance
         raw = raw.copy()
         raw.apply_function(lambda x: X, picks=picks,
@@ -331,10 +331,10 @@ def asr_calibrate(X, sfreq, cutoff=20, blocksize=100, win_len=0.5,
                   win_overlap=0.66, max_dropout_fraction=0.1,
                   min_clean_fraction=0.25, ab=None, method='euclid'):
     """Calibration function for the Artifact Subspace Reconstruction method.
-    
-    This function can be used if you inted to apply ASR to a simple numpy 
-    array instead of a mne.io.Raw object. It is equivalent to the MATLAB 
-    implementation of asr_calibrate (except for some small differences 
+
+    This function can be used if you inted to apply ASR to a simple numpy
+    array instead of a mne.io.Raw object. It is equivalent to the MATLAB
+    implementation of asr_calibrate (except for some small differences
     introduced by solvers for the eigenspace functions etc).
 
     The input to this data is a multi-channel time series of calibration data.
@@ -368,7 +368,7 @@ def asr_calibrate(X, sfreq, cutoff=20, blocksize=100, win_len=0.5,
     cutoff: float
         Standard deviation cutoff for rejection. X portions whose variance
         is larger than this threshold relative to the calibration data are
-        considered missing data and will be removed. Defaults to 20 
+        considered missing data and will be removed. Defaults to 20
         (In EEGLab's `clean_rawdata` the original threshold was set to 5, but
         it is widely recommended to use a value higher than 20).
     blocksize : int
@@ -471,10 +471,10 @@ def asr_process(data, sfreq, M, T, windowlen=0.5, lookahead=0.25, stepsize=32,
 
     This function is used to clean multi-channel signal using the ASR method.
     The required inputs are the data matrix and the sampling rate of the data.
-    
-    `asr_process` can be used if you inted to apply ASR to a simple numpy 
-    array instead of a mne.io.Raw object. It is equivalent to the MATLAB 
-    implementation of `asr_process` (except for some small differences 
+
+    `asr_process` can be used if you inted to apply ASR to a simple numpy
+    array instead of a mne.io.Raw object. It is equivalent to the MATLAB
+    implementation of `asr_process` (except for some small differences
     introduced by solvers for the eigenspace functions etc).
 
     Parameters
@@ -577,7 +577,7 @@ def asr_process(data, sfreq, M, T, windowlen=0.5, lookahead=0.25, stepsize=32,
     data = np.concatenate([carry, data], axis=-1)
 
     # splits = np.ceil(C*C*S*8*8 + C*C*8*s/stepsize + C*S*8*2 + S*8*5)...
-    splits = mem_splits  # TODO: use this for parallelization MAKE IT A PARAM FIRST
+    splits = mem_splits  # TODO: make param and use for parallelization
 
     # loop over smaller segments of the data (for memory purposes)
     last_trivial = False
