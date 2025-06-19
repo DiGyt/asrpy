@@ -61,7 +61,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.10'
 
       - name: Install tools
         run: |
@@ -79,8 +79,13 @@ jobs:
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
           PACKAGE="asrpy"
-          EXISTS=$(python -c "import json, urllib.request; versions = json.load(urllib.request.urlopen(f'https://pypi.org/pypi/{PACKAGE}/json'))['releases']; print('true' if '$VERSION' in versions else 'false')")
+          EXISTS=$(python -c "import json, sys, urllib.request;
+          package = sys.argv[1]
+          version = sys.argv[2]
+          versions = json.load(urllib.request.urlopen(f'https://pypi.org/pypi/{package}/json'))['releases']
+          print('true' if version in versions else 'false')" "$PACKAGE" "$VERSION")
           echo "exists=$EXISTS" >> $GITHUB_OUTPUT
+
 
       - name: Stop if version already exists
         if: steps.check_version.outputs.exists == 'true'
