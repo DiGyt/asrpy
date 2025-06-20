@@ -1,12 +1,14 @@
+[![Tests](https://github.com/DiGyt/asrpy/actions/workflows/publish.yml/badge.svg)](https://github.com/DiGyt/asrpy/actions/workflows/publish.yml)
+[![codecov](https://codecov.io/gh/DiGyt/asrpy/branch/main/graph/badge.svg)](https://codecov.io/gh/DiGyt/asrpy)
+[![PyPI version](https://img.shields.io/pypi/v/asrpy.svg)](https://pypi.org/project/asrpy/)
+[![Documentation](https://img.shields.io/badge/docs-pdoc3-blue)](https://DiGyt.github.io/asrpy/)
+[![Bluesky](https://img.shields.io/badge/Bluesky-0285FF?logo=bluesky&logoColor=fff&label=Follow%20me%20on&color=0285FF)](https://bsky.app/profile/gutlin.bsky.social)
+
 > [!WARNING]  
 > This toolbox is currently not actively maintained. I would love to, but we all know that the incentives set for scientists don't really encourage work like this. :')
 ___
 
 # ASRpy
-[![Tests](https://github.com/DiGyt/asrpy/actions/workflows/publish.yml/badge.svg)](https://github.com/DiGyt/asrpy/actions/workflows/publish.yml)
-[![codecov](https://codecov.io/gh/DiGyt/asrpy/branch/main/graph/badge.svg)](https://codecov.io/gh/DiGyt/asrpy)
-[![PyPI version](https://img.shields.io/pypi/v/asrpy.svg)](https://pypi.org/project/asrpy/)
-[![Documentation](https://img.shields.io/badge/docs-pdoc3-blue)](https://DiGyt.github.io/asrpy/)
 
 Artifact Subspace Reconstruction for Python
 
