@@ -56,7 +56,7 @@ pip install asrpy
 ```
 or install the current working version directly from GitHub, using:
 ```
-pip install git+https://github.com/DiGyt/asrpy.git
+pip install git+https://github.com/KishiBayes/asrpy.git
 ```
 
 
