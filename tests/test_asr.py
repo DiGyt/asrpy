@@ -7,6 +7,7 @@ import numpy as np
 from scipy.io import loadmat
 
 from asrpy import ASR, asr_calibrate, asr_process, clean_windows
+from asrpy.asr_utils import block_covariance
 from mne.io import read_raw_eeglab
 from mne.datasets import testing
 
@@ -78,3 +79,9 @@ def test_clean_windows():
 
     # Ensure cleaned data matches sample mask
     assert cleaned.shape[1] == sample_mask[0].sum()
+
+
+def test_block_covariance_remainder_two():
+    data = np.random.randn(25, 26302)  # 26302 % 100 = 2
+    out = block_covariance(data, window=100)
+    assert out.shape == (263, 25 * 25)
